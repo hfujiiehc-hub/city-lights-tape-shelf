@@ -1,12 +1,10 @@
-# City Lights Tape Shelf
+﻿# City Lights Tape Shelf
 
-自作曲MP3を共有するための静的Webサイトです。
+自作曲・AIセッション曲を整理して聴いてもらうための静的Webサイトです。
 
 ## 再開するとき
 
-会話履歴が途切れた場合は、まず `HANDOFF.md` を読んでください。
-
-新しいCodexには以下を伝えます。
+新しいCodexチャットでは、以下を伝えてください。
 
 ```text
 C:\Users\fujii\Documents\Codex\2026-06-13\web-url-web-mp3-html-css\outputs
@@ -14,80 +12,80 @@ C:\Users\fujii\Documents\Codex\2026-06-13\web-url-web-mp3-html-css\outputs
 まず HANDOFF.md、README.md、data/tracks.csv、tools/update-catalog.mjs を読んで、現状を把握してください。
 ```
 
-## 使うファイル
+## 主なファイル
 
-- `index.html`: ページ本体
+- `index.html`: Webページ本体
 - `styles.css`: 見た目とスマホ対応
-- `app.js`: 表示と再生処理
-- `data/tracks.csv`: 曲データの編集用リスト。Excelで開けます
-- `data/catalog.js`: Webページが読み込む公開用データ。CSVから作ります
-- `tools/update-catalog.ps1`: CSVを `catalog.js` に反映する更新スクリプト
-- `audio/`: MP3ファイル置き場
-- `images/`: サムネイル画像置き場
+- `app.js`: 表示、フォルダー切り替え、再生処理
+- `data/tracks.csv`: 曲台帳。Excelで編集する主ファイル
+- `data/catalog.js`: Webページが読むデータ。`tracks.csv` から生成
+- `tools/update-catalog.ps1`: CSVをWeb用データに反映する入口
+- `tools/update-catalog.mjs`: 変換処理の本体
+- `audio/`: MP3置き場。Project別のサブフォルダーに分ける
+- `images/`: サムネイル画像置き場。用途別のサブフォルダーに分ける
 - `HANDOFF.md`: 引き継ぎメモ
 
 ## 曲を追加する手順
 
-1. `audio/` にMP3を置く
-2. `images/` にサムネイル画像を置く
-3. `data/tracks.csv` に1行追加する
+1. MP3を `audio/` のProject別サブフォルダーに置く
+2. サムネイルがあれば `images/` のProject別サブフォルダーに置く
+3. `data/tracks.csv` に1行追加、または既存行を編集する
 4. `tools/update-catalog.ps1` を実行して `data/catalog.js` を更新する
+5. ブラウザを更新して、曲カードと再生を確認する
 
-`data/tracks.csv` の主な列:
+## 音源フォルダー
+
+MP3はProject別に以下のサブフォルダーへ置きます。
+
+- `[エールソング]`: `audio/aile-song/`
+- `[愛・祈り・癒し]`: `audio/healing/`
+- `[プロデュース作品]`: `audio/produce/`
+- `[洋楽 / UK & Western]`: `audio/west/`
+- `[インストゥルメンタル]`: `audio/instrumental/`
+- `[Others]`: `audio/others/`
+
+`data/tracks.csv` の `audio` 欄には、例として `./audio/aile-song/example.mp3` のように書きます。
+
+## tracks.csv の主な列
 
 - `id`: 元の順番に戻すための番号
-- `publish`: Webに表示する曲は `1`、非表示にする曲は空欄
+- `publish`: Webに表示する曲は `1`、非表示は空欄
+- `Sweet`: おすすめSweetに表示する曲は `1`
+- `Bitter`: おすすめBitterに表示する曲は `1`
 - `title`: 曲名
 - `description`: カードに表示する説明
 - `project`: Projectタブの分類
 - `genre`: カードに表示する細かいジャンル
 - `genreGroup`: Genreタブの分類
-- `style`: 洋楽風 / 邦楽風
-- `vocal`: 男性 / 女性 / 男女
+- `style`: 邦楽 / 洋楽
+- `vocal`: 男性 / 女性 / 混声など
+- `グループ`: PHASE、多摩蘭坂7、Ω5などの想定アーティストやユニット名
 - `mood`: 雰囲気
 - `audio`: MP3へのパス
-- `image`: サムネイル画像へのパス
+- `image`: 曲サムネイルへのパス
+- `imageFolder`: 画像管理用の分類メモ
+- `note`: 公開しない管理メモ
 
-## フォルダー分類を変える場所
+## 画像フォルダー
 
-`data/tracks.csv` の各曲にある以下の値を変えると、表示されるフォルダーが変わります。
+画像は以下のように用途別に分けています。
 
-- `project`: Projectタブの分類
-- `genreGroup`: Genreタブの分類
-- `vocal`: Vocalタブの分類
+- `images/project/`: Projectカード用画像
+- `images/osusume/`: おすすめフォルダー用画像
+- `images/folders/`: Genre / Vocal などの仮フォルダー画像
+- `images/banner/`: 今後トップ画面などに使うバナー画像
+- `images/aile-song/`: `[エールソング]` の曲サムネイル
+- `images/healing/`: `[愛・祈り・癒し]` の曲サムネイル
+- `images/produce/`: `[プロデュース作品]` の曲サムネイル
+- `images/west/`: `[洋楽 / UK & Western]` の曲サムネイル
+- `images/instrumental/`: `[インストゥルメンタル]` の曲サムネイル
+- `images/others/`: `[Others]` の曲サムネイル
 
-フォルダーは `project`, `genreGroup`, `vocal` の値から自動生成されます。
+`data/tracks.csv` の `image` 欄には、例として `./images/aile-song/example.png` のように書きます。
 
-## サムネイル
+## データ更新
 
-サムネイル画像ファイルそのものは `images/` に置きます。`data/tracks.csv` の `image` 列には、その画像へのパスだけを書きます。
-
-例:
-
-例: `./images/new-song.jpg`
-
-曲ごとのサムネイルが未指定の場合は `images/thumb-default.svg` が表示されます。
-
-フォルダー用サムネイルは `images/folder-*.svg` を仮画像として入れています。後から同じファイル名で画像を差し替えると反映されます。
-
-## データ管理について
-
-曲リストは `data/tracks.csv` 一枚で編集し、公開用の `data/catalog.js` に変換します。
-
-CSVはExcelで開けるので、曲が増えたときも表として管理できます。
-
-`publish` 列を使うと、CSVに曲情報を残したまま、Webに出す曲だけを選べます。
-
-- `1`: Webに表示する
-- 空欄: Webに表示しない
-
-元データとして残したい曲は削除せず、`publish` を空欄にしてください。
-
-GitHub Pagesで公開する場合も、このままで動きます。
-
-## CSVをWeb用データに反映する
-
-PowerShellで以下を実行します。
+`tracks.csv` を編集した後は、PowerShellで以下を実行します。
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File outputs\tools\update-catalog.ps1
@@ -97,13 +95,16 @@ powershell -ExecutionPolicy Bypass -File outputs\tools\update-catalog.ps1
 
 ## GitHub Pages公開の考え方
 
-GitHubで公開するときは、この `outputs` フォルダの中身をリポジトリに置きます。
+GitHub公開時は、`outputs` の中身をリポジトリへ置きます。
 
-おすすめ:
+- `index.html`, `styles.css`, `app.js`, `data/`, `images/`, `audio/` が必要
+- `data/catalog.js` は更新済みにしておく
+- GitHubに置く `audio/` には、公開対象のMP3だけを入れるのが安全
+- MP3は容量が大きくなりやすいので、リポジトリ全体を大きくしすぎない
 
-- リポジトリ直下に `index.html`, `styles.css`, `app.js`, `audio/`, `images/` を置く
-- GitHub Pagesの公開元を `main` ブランチの root にする
-- MP3ファイル名は英数字、ハイフン、アンダースコア中心にすると安全
-- GitHubへ置く `audio/` には、公開対象のMP3だけを入れるのが安全
+## 現在の状態
 
-MP3は容量が大きくなりやすいので、1ファイル100MB未満、リポジトリ全体も大きくしすぎないようにします。
+- 曲台帳は40行
+- `publish=1` の公開対象は30曲
+- 音源リンク切れは0件
+- MP3はProject別の `audio/` サブフォルダーへ整理済み

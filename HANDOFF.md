@@ -1,10 +1,8 @@
-# HANDOFF - 自作曲公開Webサイト
+﻿# HANDOFF - 自作曲公開Webサイト
 
 このメモは、Codexの会話履歴が途切れても作業を再開できるようにするための引き継ぎ資料です。
 
 ## 再開時にCodexへ伝える文
-
-以下をそのまま新しいチャットで伝えてください。
 
 ```text
 C:\Users\fujii\Documents\Codex\2026-06-13\web-url-web-mp3-html-css\outputs
@@ -13,25 +11,17 @@ C:\Users\fujii\Documents\Codex\2026-06-13\web-url-web-mp3-html-css\outputs
 既存の曲情報とファイルは壊さず、変更前にリンク切れを確認してください。
 ```
 
-## 現在の目的
+## 目的
 
-自作曲MP3を一般共有できる静的Webサイトを作成中。
+自作曲・AIセッション曲のMP3を、GitHub Pagesなどで限定共有できる静的Webサイトとして整理しています。
 
-- 視聴者はGitHub Pages上のWebページで曲を聴く
-- 管理作業はPC上で行う
-- GitHubは公開先として使う
-- PC上で動作確認してからGitHubへ反映する
-
-重要な方針:
-
-- GitHub上では管理画面や書き込み機能は作らない
-- PC上の `tracks.csv` を曲台帳として使う
-- `publish` 列でWebに表示する曲を選ぶ
-- GitHubへ置く `audio/` には公開対象のMP3だけを入れるのが安全
+- 視聴者はWebページ上で曲を選び、下部プレイヤーで再生する
+- 管理作業はPC上の `tracks.csv` を中心に行う
+- GitHub側には視聴者向けUIだけを置く
+- `publish` 列で公開する曲を選ぶ
+- GitHubに置く `audio/` には、公開対象のMP3だけを入れるのが安全
 
 ## 作業場所
-
-ルート:
 
 ```text
 C:\Users\fujii\Documents\Codex\2026-06-13\web-url-web-mp3-html-css\outputs
@@ -47,21 +37,23 @@ C:\Users\fujii\Documents\Codex\2026-06-13\web-url-web-mp3-html-css\outputs\index
 
 - `index.html`: Webページ本体
 - `styles.css`: 画面デザイン、スマホ対応
-- `app.js`: 表示・フォルダー切り替え・再生処理
+- `app.js`: 表示、フォルダー切り替え、再生処理
 - `data/tracks.csv`: 曲台帳。Excelで編集する主ファイル
 - `data/catalog.js`: Webページが読むデータ。`tracks.csv` から自動生成
 - `tools/update-catalog.ps1`: CSVをWeb用データへ反映する入口
 - `tools/update-catalog.mjs`: 変換本体
 - `tools/normalize-tracks-csv.mjs`: CSVをExcel向けUTF-8 BOM付きに整え、列を補正する
-- `audio/`: MP3置き場
-- `images/`: サムネイル置き場
+- `audio/`: MP3置き場。Project別のサブフォルダーに整理済み
+- `images/`: サムネイル置き場。用途別のサブフォルダーに整理済み
 - `README.md`: 基本手順
 - `HANDOFF.md`: この引き継ぎメモ
 
 ## 現在の機能
 
-- Project / Genre / Vocal タブでフォルダー表示
+- おすすめ / Project / Genre / Vocal タブでフォルダー表示
+- おすすめには `[Sweet]` と `[Bitter]` のサブフォルダーがある
 - Projectフォルダーを指定順で表示
+- `[プロデュース作品]` を開いた時だけ、さらにアーティスト別フォルダーを表示
 - フォルダーを開くと、その中の公開曲だけ表示
 - 曲カードをクリックすると下部のHTML5 audio playerで再生
 - `publish=1` の曲だけWebに表示
@@ -71,141 +63,154 @@ C:\Users\fujii\Documents\Codex\2026-06-13\web-url-web-mp3-html-css\outputs\index
 
 ## 現在の曲数
 
-`data/tracks.csv` には39行の曲情報があります。
+`data/tracks.csv` には40行の曲情報があります。
 
 Project別の台帳上の内訳:
 
 - `[エールソング]`: 8曲
-- `[愛・祈・癒]`: 7曲
-- `[プロデュース]`: 9曲
-- `[West]`: 7曲
-- `[インスト]`: 2曲
-- `[Othes]`: 6曲
+- `[愛・祈り・癒し]`: 7曲
+- `[プロデュース作品]`: 10曲
+- `[洋楽 / UK & Western]`: 7曲
+- `[インストゥルメンタル]`: 2曲
+- `[Others]`: 6曲
 
-現在 `publish=1` の公開対象は28曲です。
+現在 `publish=1` の公開対象は30曲です。
 
 ## Project表示順
 
 UIではProjectフォルダーを以下の順番で表示します。
 
 1. `[エールソング]`
-2. `[愛・祈・癒]`
-3. `[プロデュース]`
-4. `[West]`
-5. `[インスト]`
-6. `[Othes]`
+2. `[愛・祈り・癒し]`
+3. `[プロデュース作品]`
+4. `[洋楽 / UK & Western]`
+5. `[インストゥルメンタル]`
+6. `[Others]`
 
 この順序は `app.js` の `folderOrder.project` で管理しています。
 
+## プロデュース作品のサブフォルダー
+
+Projectタブで `[プロデュース作品]` を開いた時だけ、曲一覧の前に以下のアーティスト別フォルダーを表示します。
+
+- `多摩蘭坂7`
+- `Ω5`
+- `The Phase`
+
+この分類は `tracks.csv` の `グループ` 列を使います。
+
+- `多摩蘭坂7` -> `多摩蘭坂7`
+- `Ω5` -> `Ω5`
+- `The Phase` と `The Phase&Ω5` -> `The Phase`
+
+表示ロジックは `app.js` の `producerFolders` にあります。
+
+アーティストフォルダー用画像:
+
+- `多摩蘭坂7`: `./images/produce/TRS7.png`
+- `Ω5`: `./images/produce/omega5.png`
+- `The Phase`: `./images/produce/the-phase.png`
+
+各アーティストの曲別サムネイルは、それぞれ以下へ置きます。
+
+- `images/produce/TRS7/`
+- `images/produce/omega5/`
+- `images/produce/the-phase/`
+
+## おすすめ
+
+おすすめタブでは、`tracks.csv` の以下の列を見ます。
+
+- `Sweet`: `1` の曲を `[Sweet]` に表示
+- `Bitter`: `1` の曲を `[Bitter]` に表示
+
+説明文と画像は `tools/update-catalog.mjs` の `folderDescriptions` と `folderImages` で管理しています。
+
 ## Project説明文
 
-Projectカードには説明文を表示します。
+Projectカードの説明文は `tools/update-catalog.mjs` の `folderDescriptions` にあります。
 
-説明文は `tools/update-catalog.mjs` の `folderDescriptions` にあります。
+短い説明文:
 
-現在の説明:
+- `[エールソング]`: 旅立ち、変化、迷いの中で、少し前を向くための曲たち。
+- `[愛・祈り・癒し]`: 愛、喪失、祈り、記憶の余韻を静かに描いた曲たち。
+- `[プロデュース作品]`: 架空のバンドやユニットを想定して制作したポップ／ロック作品。
+- `[洋楽 / UK & Western]`: 80年代UKロックやニューウェーブの質感を意識した洋楽系作品。
+- `[インストゥルメンタル]`: ギターとハーモニーで、朝や昼の風景を描いた器楽曲。
+- `[Others]`: ゲーム、ホラー、映画的楽曲、実験作など、分類しにくい小品集。
 
-- `[エールソング]`: 背中を押す言葉や、前へ進む気持ちを軸にした楽曲。
-- `[愛・祈・癒]`: 愛、祈り、喪失、回復の余韻を静かに描く楽曲。
-- `[プロデュース]`: 架空のバンドやグループを想定して制作した、キャラクター性のある楽曲。
-- `[West]`: UKロック、ニューウェーブ、洋楽ポップの質感を意識した楽曲。
-- `[インスト]`: ギターやアンサンブルの響きを中心にしたインストゥルメンタル系の楽曲。
-- `[Othes]`: 実験的な曲、ホラー、ゲーム音楽的な小品など、既存枠に収まりにくい楽曲。
+## 画像フォルダー
 
-## 表記ゆれ吸収
+画像は用途別に以下のサブフォルダーへ整理済みです。
 
-CSV内に古い表記があっても、Web用データ生成時に一部吸収します。
+- `images/project/`: Projectカード用画像
+- `images/osusume/`: おすすめフォルダー用画像
+- `images/folders/`: Genre / Vocal などの仮フォルダー画像
+- `images/banner/`: 今後トップ画面などに使うバナー画像
+- `images/aile-song/`: `[エールソング]` の曲サムネイル
+- `images/healing/`: `[愛・祈り・癒し]` の曲サムネイル
+- `images/produce/`: `[プロデュース作品]` の曲サムネイル
+- `images/west/`: `[洋楽 / UK & Western]` の曲サムネイル
+- `images/instrumental/`: `[インストゥルメンタル]` の曲サムネイル
+- `images/others/`: `[Others]` の曲サムネイル
 
-`tools/update-catalog.mjs` の `normalizeProject()` で処理しています。
-
-- `[？]` -> `[Othes]`
-- `[癒し]` -> `[愛・祈・癒]`
-- `[洋楽]` -> `[West]`
-- `[Other]` -> `[Othes]`
-- `[インスト曲]` -> `[インスト]`
+曲サムネイルを追加するときは、`tracks.csv` の `image` 欄に `./images/aile-song/example.png` のように書きます。
 
 ## Projectサムネイル
 
 Project用の仮サムネイルPNGを作成済みです。
 
-保存場所:
-
-```text
-outputs\images
-```
-
 現在使っているファイル:
 
-- `[エールソング]`: `./images/project-ailesong.png`
-- `[愛・祈・癒]`: `./images/project-healing.png`
-- `[プロデュース]`: `./images/project-produce.png`
-- `[West]`: `./images/project-west.png`
-- `[インスト]`: `./images/project-instrumental.png`
-- `[Othes]`: `./images/project-othes.png`
+- `[エールソング]`: `./images/project/project-ailesong.png`
+- `[愛・祈り・癒し]`: `./images/project/project-healing.png`
+- `[プロデュース作品]`: `./images/project/project-produce.png`
+- `[洋楽 / UK & Western]`: `./images/project/project-west.png`
+- `[インストゥルメンタル]`: `./images/project/project-instrumental.png`
+- `[Others]`: `./images/project/project-othes.png`
+- `[Sweet]`: `./images/osusume/osusume-Sweet.png`
+- `[Bitter]`: `./images/osusume/osusume-Bitter.png`
 
 対応表は `tools/update-catalog.mjs` の `folderImages` にあります。
-
-後で差し替える場合:
-
-- 同じファイル名で `outputs/images/` に上書きする
-- これが最も安全
-- ファイル名を変える場合は `folderImages` も変更し、`update-catalog.ps1` を実行する
-
-## 曲サムネイル
-
-曲ごとのサムネイルは未整備です。
-
-今後の方針:
-
-- 画像ファイルは `outputs/images/` に置く
-- ファイル名は英数字・ハイフン中心にする
-- 例: `track-001-mada-minu-sekai.png`
-- `data/tracks.csv` の `image` 列に `./images/track-001-mada-minu-sekai.png` のように書く
-- 空欄なら共通仮画像 `thumb-default.svg` が表示される
-
-文字入りサムネイルは避ける。曲名はHTML側で表示されるため、画像は抽象イメージのみが安全。
 
 ## tracks.csv の列
 
 `data/tracks.csv` はExcelで開けるよう、UTF-8 BOM付きCSVです。
 
-主な列:
+現在の主な列:
 
-- `id`: 管理番号。元の順番へ戻すためにも使う
-- `publish`: `1` ならWeb表示、空欄なら非表示
-- `title`: 曲名
-- `description`: カードに表示する説明
-- `project`: Project分類
-- `genre`: カードに表示する細かいジャンル
-- `genreGroup`: Genreタブの分類
-- `style`: 邦楽 / 洋楽
-- `vocal`: 男性 / 女性 / 混声 / 電子音など
-- `mood`: 雰囲気
-- `audio`: MP3へのパス
-- `image`: 曲サムネイルへのパス
-
-Excelで編集するとき:
-
-- 行全体を崩さない
-- ソートは行全体を選ぶ
-- `publish` は `1` または空欄
-- ファイルを保存して閉じてからCodexに更新を依頼する
+- `id`
+- `publish`
+- `Sweet`
+- `Bitter`
+- `title`
+- `description`
+- `project`
+- `genre`
+- `genreGroup`
+- `style`
+- `vocal`
+- `グループ`
+- `mood`
+- `audio`
+- `image`
+- `imageFolder`
+- `note`
 
 ## 音源ファイル
 
-MP3はここに置く:
+MP3は `audio/` の直下ではなく、Project別のサブフォルダーに整理済みです。
 
-```text
-outputs\audio
-```
+- `[エールソング]`: `audio/aile-song/`
+- `[愛・祈り・癒し]`: `audio/healing/`
+- `[プロデュース作品]`: `audio/produce/`
+- `[洋楽 / UK & Western]`: `audio/west/`
+- `[インストゥルメンタル]`: `audio/instrumental/`
+- `[Others]`: `audio/others/`
 
-現在、`tracks.csv` 内の `audio` 欄は非公開曲も含めて全件存在確認済み。
+`tracks.csv` の `audio` 欄も、上記のサブフォルダーを含む形に更新済みです。
 
-ただし、GitHub公開時は注意:
-
-- UIに表示しなくても、GitHubに置いたMP3はURLを知ればアクセス可能
-- 本当に公開しない曲は、GitHub側の `audio/` には入れない方が安全
-- PC上の `audio/` は候補曲置き場として多めに入れてよい
+現在、`tracks.csv` 内の `audio` 欄は非公開曲も含めて全件存在確認済みです。
 
 ## データ更新手順
 
@@ -215,80 +220,26 @@ outputs\audio
 powershell -ExecutionPolicy Bypass -File outputs\tools\update-catalog.ps1
 ```
 
-その後、ブラウザを更新します。
-
-## CSV整形手順
-
-`tracks.csv` の文字化け対策や列補正が必要な場合:
-
-```powershell
-node outputs\tools\normalize-tracks-csv.mjs
-powershell -ExecutionPolicy Bypass -File outputs\tools\update-catalog.ps1
-```
-
-注意:
-
-- Excelで `tracks.csv` を開いたままだと上書きできずエラーになる
-- 必ずExcelを閉じてから実行する
+Excelで `tracks.csv` を開いたままだと上書きできずエラーになるため、必ずExcelを閉じてから実行します。
 
 ## リンク切れ確認
 
-Codexは変更後、最低限以下を確認すること。
+Codexは変更後、最低限以下を確認してください。
 
-1. `tracks.csv` の公開対象 `publish=1` の `audio` が存在するか
-2. 非公開曲も含めて `audio` 欄に書いたファイルが存在するか
-3. `image` 欄に書いたファイルが存在するか
-4. `catalog.js` と `app.js` の構文チェック
+1. `tracks.csv` の `audio` 欄に書いたファイルが存在するか
+2. `image` 欄に書いたファイルが存在するか
+3. `catalog.js` と `app.js` の構文チェック
+4. ブラウザ更新後に、フォルダー表示と再生ができるか
 
-実施済みの状態:
+## 次にやること
 
-- `audio` 欄のリンク切れは修正済み
-- 重複して同じMP3を指していた箇所も修正済み
-- `catalog.js` 更新済み
-- Project PNG画像参照は存在確認済み
-
-## 最近修正した音源リンク
-
-以下を修正済み。
-
-- `.mp4` / `.mp5` になっていたパスを `.mp3` に修正
-- `J-POP` / `J-pop` の違いを実ファイルに合わせて修正
-- `West` / `west` の違いを実ファイルに合わせて修正
-- 空欄だった `旅立ちのうた` の音源パスを追加
-- `Signal Manners` が別曲を指していたので修正
-- `Space_Between_the_Scenes` が別曲を指していたので修正
-- `The Glass and the Stone` と `The Stopped Watch` を実ファイル名に修正
-- `Not Yor Monster` を `Not your Monster` に修正し、音源パスも修正
-
-## 次にやる予定
-
-優先順:
-
-1. 曲サムネイルを作る
+1. 曲ごとのサムネイルを用意する
 2. `tracks.csv` の `image` 列へ対応させる
-3. PC上でProject -> 曲カード -> 再生を確認
+3. PC上でProject、曲カード、再生を確認する
 4. 公開対象曲を `publish` で絞る
 5. GitHub公開用に `audio/` を公開対象だけへ整理する
-6. GitHub Pagesへ移行
-7. 公開URLでスマホ表示と再生を確認
-
-## GitHub移行の考え方
-
-PC上:
-
-- 制作、編集、確認、候補曲管理
-
-GitHub:
-
-- 視聴者向け公開ページ
-- 管理機能は置かない
-
-GitHubへ渡すとき:
-
-- `outputs` の中身をリポジトリに置く
-- 公開対象のMP3だけ `audio/` に入れる
-- `data/catalog.js` は更新済みにする
-- `index.html`, `styles.css`, `app.js`, `data/`, `images/`, `audio/` が必要
+6. GitHub Pagesへ移行する
+7. 公開URLでスマホ表示と再生を確認する
 
 ## 重要な注意
 
@@ -296,8 +247,9 @@ GitHubへ渡すとき:
 
 再契約や新しいチャットで会話文脈が失われても、以下が残っていれば再開できます。
 
-```text
-C:\Users\fujii\Documents\Codex\2026-06-13\web-url-web-mp3-html-css\outputs
-```
-
-新しいCodexには必ず最初に `HANDOFF.md` を読ませてください。
+- `outputs/`
+- `outputs/HANDOFF.md`
+- `outputs/README.md`
+- `outputs/data/tracks.csv`
+- `outputs/audio/`
+- `outputs/images/`

@@ -13,10 +13,43 @@ const currentTitle = document.querySelector("#current-title");
 const currentMeta = document.querySelector("#current-meta");
 
 let currentMode = "project";
+let backHandler = () => renderFolders(currentMode);
+let producerProjectItems = [];
 
 const folderOrder = {
-  project: ["[エールソング]", "[愛・祈・癒]", "[プロデュース]", "[West]", "[インスト]", "[Othes]"],
+  recommend: ["[Sweet]", "[Bitter]"],
+  project: [
+    "[エールソング]",
+    "[愛・祈り・癒し]",
+    "[プロデュース作品]",
+    "[洋楽 / UK & Western]",
+    "[インストゥルメンタル]",
+    "[Others]",
+  ],
 };
+
+const produceProjectName = "[プロデュース作品]";
+
+const producerFolders = [
+  {
+    title: "多摩蘭坂7",
+    aliases: ["多摩蘭坂7"],
+    description: "架空の女性グループ。緊張感のあるポップ／ロック作品をまとめています。",
+    image: "./images/produce/TRS7.png",
+  },
+  {
+    title: "Ω5",
+    aliases: ["Ω5"],
+    description: "ギターリフと疾走感を軸にした、架空ロックバンドの楽曲群です。",
+    image: "./images/produce/omega5.png",
+  },
+  {
+    title: "The Phase",
+    aliases: ["The Phase", "The Phase&Ω5"],
+    description: "ダークで都会的なニューウェーブ感を持つ、架空バンドの楽曲群です。",
+    image: "./images/produce/the-phase.png",
+  },
+];
 
 function makeChip(text) {
   const chip = document.createElement("span");
@@ -44,6 +77,20 @@ function makeThumb(imageSrc, alt) {
 }
 
 function groupTracks(mode) {
+  if (mode === "recommend") {
+    const groups = new Map();
+    [
+      ["[Sweet]", "Sweet"],
+      ["[Bitter]", "Bitter"],
+    ].forEach(([folderName, key]) => {
+      const items = tracks.filter((track) => String(track[key] || "").trim() !== "");
+      if (items.length) {
+        groups.set(folderName, items);
+      }
+    });
+    return groups;
+  }
+
   const key = folderModes[mode].key;
   return tracks.reduce((groups, track) => {
     const name = track[key] || "Other";
@@ -73,6 +120,7 @@ function sortFolderEntries(entries, mode) {
 
 function renderFolders(mode = currentMode) {
   currentMode = mode;
+  backHandler = () => renderFolders(currentMode);
   const modeInfo = folderModes[currentMode];
   const grouped = groupTracks(currentMode);
 
@@ -110,15 +158,80 @@ function renderFolders(mode = currentMode) {
 
     body.append(title, description, meta);
     card.append(makeThumb(info.image, `${name} のフォルダーサムネイル`), body);
-    card.addEventListener("click", () => renderTracks(name, items));
+    card.addEventListener("click", () => {
+      if (currentMode === "project" && name === produceProjectName) {
+        renderProducerFolders(items);
+        return;
+      }
+      renderTracks(name, items);
+    });
     folderList.append(card);
   });
 }
 
-function renderTracks(folderName, items) {
-  viewKicker.textContent = folderModes[currentMode].label;
+function renderProducerFolders(items) {
+  const info = folderInfo[produceProjectName] || {};
+  producerProjectItems = items;
+  backHandler = () => renderFolders("project");
+
+  viewKicker.textContent = "Project";
+  viewTitle.textContent = produceProjectName;
+  viewDescription.textContent =
+    info.longDescription || "仮想アーティストごとに制作した曲群です。";
+  backButton.hidden = false;
+  folderList.hidden = false;
+  trackList.hidden = true;
+  folderList.innerHTML = "";
+  trackList.innerHTML = "";
+
+  producerFolders.forEach((folder) => {
+    const folderItems = items.filter((track) => folder.aliases.includes(track["グループ"]));
+    if (!folderItems.length) {
+      return;
+    }
+
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "folder-card";
+    card.setAttribute("aria-label", `${folder.title} の曲を表示`);
+
+    const body = document.createElement("div");
+    body.className = "card-body";
+
+    const title = document.createElement("h3");
+    title.className = "card-title";
+    title.textContent = folder.title;
+
+    const description = document.createElement("p");
+    description.className = "description";
+    description.textContent = folder.description;
+
+    const meta = document.createElement("div");
+    meta.className = "meta-list";
+    meta.append(makeChip(`${folderItems.length} tracks`));
+    meta.append(makeChip("Artist"));
+
+    body.append(title, description, meta);
+    card.append(makeThumb(folder.image, `${folder.title} のフォルダーサムネイル`), body);
+    card.addEventListener("click", () => {
+      backHandler = () => renderProducerFolders(producerProjectItems);
+      renderTracks(folder.title, folderItems, "Artist");
+    });
+    folderList.append(card);
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderTracks(folderName, items, kickerLabel = folderModes[currentMode].label) {
+  const info = folderInfo[folderName] || {};
+  if (kickerLabel !== "Artist") {
+    backHandler = () => renderFolders(currentMode);
+  }
+  viewKicker.textContent = kickerLabel;
   viewTitle.textContent = folderName;
-  viewDescription.textContent = `${items.length}曲。カードを選ぶと下のプレイヤーで再生します。`;
+  viewDescription.textContent =
+    info.longDescription || `${items.length}曲。カードを選ぶと下のプレイヤーで再生します。`;
   backButton.hidden = false;
   folderList.hidden = true;
   trackList.hidden = false;
@@ -179,6 +292,6 @@ tabButtons.forEach((button) => {
   });
 });
 
-backButton.addEventListener("click", () => renderFolders(currentMode));
+backButton.addEventListener("click", () => backHandler());
 
 renderFolders();

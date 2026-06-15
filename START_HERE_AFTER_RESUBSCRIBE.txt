@@ -1,0 +1,45 @@
+再契約後、Codexに最初に送る文:
+
+C:\Users\fujii\Documents\Codex\2026-06-13\web-url-web-mp3-html-css\outputs
+にある自作曲公開Webサイトの続きをしてください。
+まず HANDOFF.md、README.md、data/tracks.csv、tools/update-catalog.mjs を読んで、現状を把握してください。
+既存の曲情報とファイルは壊さず、変更前にリンク切れを確認してください。
+
+重要:
+- この outputs フォルダが成果物本体です。
+- index.html を開くとPC上でページを確認できます。
+- data/tracks.csv が曲台帳です。
+- publish が 1 の曲だけWebページに表示されます。
+- data/catalog.js は tracks.csv から生成されるWeb用データです。
+- HANDOFF.md に詳細な引き継ぎ情報があります。
+
+再開直後にCodexへ依頼するとよい確認:
+1. HANDOFF.md を読んで現状把握
+2. tracks.csv と audio のリンク切れ確認
+3. tracks.csv と images のリンク切れ確認
+4. catalog.js の再生成
+5. 右のブラウザで表示・再生確認
+
+
+
+web-url-web-mp3-html-css
+outputs
+START_HERE_AFTER_RESUBSCRIBE.txt
+再契約後、Codexに最初に送る文:
+C:\Users\fujii\Documents\Codex\2026-06-13\web-url-web-mp3-html-css\outputs
+にある自作曲公開Webサイトの続きをしてください。
+まず HANDOFF.md、README.md、data/tracks.csv、tools/update-catalog.mjs を読んで、現状を把握してください。
+既存の曲情報とファイルは壊さず、変更前にリンク切れを確認してください。
+重要:
+- この outputs フォルダが成果物本体です。
+- index.html を開くとPC上でページを確認できます。
+- data/tracks.csv が曲台帳です。
+- publish が 1 の曲だけWebページに表示されます。
+- data/catalog.js は tracks.csv から生成されるWeb用データです。
+- HANDOFF.md に詳細な引き継ぎ情報があります。
+再開直後にCodexへ依頼するとよい確認:
+1. HANDOFF.md を読んで現状把握
+2. tracks.csv と audio のリンク切れ確認
+3. tracks.csv と images のリンク切れ確認
+4. catalog.js の再生成
+5. 右のブラウザで表示・再生確認

@@ -65,6 +65,8 @@ const rows = parseCsv(await fs.readFile(tracksPath, "utf8"));
 const headers = [
   "id",
   "publish",
+  "Sweet",
+  "Bitter",
   "title",
   "description",
   "project",
@@ -72,9 +74,12 @@ const headers = [
   "genreGroup",
   "style",
   "vocal",
+  "グループ",
   "mood",
   "audio",
   "image",
+  "imageFolder",
+  "note",
 ];
 
 const csvRows = [
@@ -86,7 +91,7 @@ const csvRows = [
           return toCsvValue(row.id || String(index + 1).padStart(3, "0"));
         }
         if (header === "publish") {
-          return toCsvValue(row.publish || "1");
+          return toCsvValue(Object.hasOwn(row, "publish") ? row.publish : "1");
         }
         return toCsvValue(row[header]);
       })
