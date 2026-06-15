@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="楽曲サムネイル">
+  <rect width="800" height="600" fill="#111412"/>
+  <path d="M70 84h660v380H70z" fill="#20251f" stroke="#d7b46a" stroke-width="8"/>
+  <path d="M116 150h568M116 204h568M116 258h568M116 312h568M116 366h568" stroke="#33463f" stroke-width="8"/>
+  <circle cx="580" cy="210" r="54" fill="#d7b46a"/>
+  <path d="M130 448c105-70 190-70 295 0s190 70 300 0" fill="none" stroke="#78aeb1" stroke-width="22"/>
+  <path d="M158 178h96M158 234h132M158 290h72" stroke="#b66d73" stroke-width="14"/>
+  <path d="M118 510h564" stroke="#8fa15f" stroke-width="16"/>
+</svg>

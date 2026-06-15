@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="夜の高架とネオンの抽象サムネイル">
+  <rect width="800" height="600" fill="#121816"/>
+  <path d="M0 380h800v220H0z" fill="#20251f"/>
+  <path d="M0 340c160-34 270-34 430 0 126 27 244 28 370 0v55H0z" fill="#30382e"/>
+  <path d="M0 412h800" stroke="#d7b46a" stroke-width="6"/>
+  <path d="M0 454h800" stroke="#78aeb1" stroke-width="3"/>
+  <path d="M70 120h100v220H70zM214 82h86v260h-86zM348 148h128v194H348zM532 102h92v240h-92zM672 150h74v192h-74z" fill="#1f2b2b"/>
+  <path d="M92 150h44M92 190h44M236 116h42M236 156h42M372 184h80M372 226h80M554 138h48M554 178h48M692 184h36" stroke="#b66d73" stroke-width="10"/>
+  <circle cx="610" cy="84" r="34" fill="#d7b46a"/>
+  <path d="M100 500c110-70 240-70 350 0s220 70 350 0" fill="none" stroke="#8fa15f" stroke-width="18" opacity=".8"/>
+</svg>

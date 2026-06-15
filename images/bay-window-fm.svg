@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="港町の窓辺とFMラジオの抽象サムネイル">
+  <rect width="800" height="600" fill="#17201f"/>
+  <path d="M0 355h800v245H0z" fill="#263229"/>
+  <path d="M0 330c130 28 250 28 380 0s250-28 420 6v70H0z" fill="#78aeb1"/>
+  <path d="M58 74h294v250H58z" fill="#2b3028" stroke="#d7b46a" stroke-width="10"/>
+  <path d="M92 112h96v178H92zM222 112h96v178h-96z" fill="#121816"/>
+  <circle cx="570" cy="212" r="92" fill="#d7b46a"/>
+  <path d="M456 324h238v112H456z" fill="#b66d73"/>
+  <path d="M486 360h112" stroke="#f4efe5" stroke-width="10"/>
+  <circle cx="638" cy="380" r="24" fill="#20251f"/>
+  <path d="M80 470h640" stroke="#f4efe5" stroke-width="5" opacity=".4"/>
+  <path d="M130 512h100m70 0h100m70 0h100" stroke="#d7b46a" stroke-width="8"/>
+</svg>

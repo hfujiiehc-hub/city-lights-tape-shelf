@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="仮サムネイル">
+  <rect width="800" height="600" fill="#111412"/>
+  <path d="M0 0h800v600H0z" fill="#17201f"/>
+  <path d="M80 94h640v360H80z" fill="#20251f" stroke="#d7b46a" stroke-width="8"/>
+  <path d="M122 142h556M122 190h556M122 238h556M122 286h556M122 334h556M122 382h556" stroke="#33463f" stroke-width="8"/>
+  <circle cx="564" cy="210" r="54" fill="#d7b46a"/>
+  <path d="M138 440c100-70 182-70 282 0s180 70 290 0" fill="none" stroke="#78aeb1" stroke-width="22"/>
+  <path d="M172 184h92M172 232h64M172 280h120" stroke="#b66d73" stroke-width="14"/>
+  <path d="M120 500h560" stroke="#8fa15f" stroke-width="16"/>
+</svg>

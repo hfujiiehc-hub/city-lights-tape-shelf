@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="ガラスのアーケードとネオンの抽象サムネイル">
+  <rect width="800" height="600" fill="#111412"/>
+  <path d="M108 76h584l64 420H44z" fill="#20251f" stroke="#78aeb1" stroke-width="10"/>
+  <path d="M156 126h488l34 300H122z" fill="#151817" stroke="#d7b46a" stroke-width="6"/>
+  <path d="M214 160v236M306 160v236M400 160v236M494 160v236M586 160v236" stroke="#33463f" stroke-width="8"/>
+  <path d="M150 236h500M136 318h528" stroke="#33463f" stroke-width="8"/>
+  <path d="M226 464h348v60H226z" fill="#b66d73"/>
+  <path d="M270 492h260" stroke="#f4efe5" stroke-width="9"/>
+  <circle cx="238" cy="220" r="34" fill="#d7b46a"/>
+  <circle cx="564" cy="284" r="28" fill="#78aeb1"/>
+  <path d="M70 548h660" stroke="#8fa15f" stroke-width="16"/>
+</svg>
