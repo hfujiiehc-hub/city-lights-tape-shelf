@@ -129,6 +129,7 @@ function sortFolderEntries(entries, mode) {
 }
 
 function renderFolders(mode = currentMode) {
+  document.body.classList.remove("is-subview");
   currentMode = mode;
   setActiveTab(currentMode);
   backHandler = () => renderFolders(currentMode);
@@ -181,6 +182,7 @@ function renderFolders(mode = currentMode) {
 }
 
 function renderProducerFolders(items) {
+  document.body.classList.add("is-subview");
   const info = folderInfo[produceProjectName] || {};
   producerProjectItems = items;
   backHandler = () => renderFolders("project");
@@ -235,6 +237,7 @@ function renderProducerFolders(items) {
 }
 
 function renderTracks(folderName, items, kickerLabel = folderModes[currentMode].label) {
+  document.body.classList.add("is-subview");
   const info = folderInfo[folderName] || {};
   if (kickerLabel !== "Artist") {
     backHandler = () => renderFolders(currentMode);

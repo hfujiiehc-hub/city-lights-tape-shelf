@@ -100,6 +100,21 @@ h1 {
   line-height: 1.7;
 }
 
+body.is-subview .site-header {
+  padding-bottom: 6px;
+}
+
+body.is-subview .site-header h1 {
+  max-width: none;
+  margin-bottom: 0;
+  font-size: 1.42rem;
+  line-height: 1.08;
+}
+
+body.is-subview .site-header .lead {
+  display: none;
+}
+
 .page {
   padding: 10px 0 44px;
 }
@@ -509,6 +524,21 @@ audio {
 
   .lead {
     font-size: 0.96rem;
+  }
+
+  body.is-subview .site-header {
+    padding: 44px 0 128px;
+  }
+
+  body.is-subview .site-header h1 {
+    max-width: 8.8ch;
+    margin-bottom: 14px;
+    font-size: clamp(3.2rem, 7vw, 5.4rem);
+    line-height: 0.94;
+  }
+
+  body.is-subview .site-header .lead {
+    display: block;
   }
 
   .view-head {
