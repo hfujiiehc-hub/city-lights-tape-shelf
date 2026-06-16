@@ -59,6 +59,7 @@ function parseCsv(text) {
 
 const folderImages = {
   "[Sweet]": "./images/osusume/osusume-Sweet.png",
+  "[Half&Half]": "./images/thumb-default.svg",
   "[Bitter]": "./images/osusume/osusume-Bitter.png",
   "[エールソング]": "./images/project/project-ailesong.png",
   "[愛・祈り・癒し]": "./images/project/project-healing.png",
@@ -97,6 +98,7 @@ const folderImages = {
 
 const folderDescriptions = {
   "[Sweet]": "優しく、切なく、あるいは前向きな曲。",
+  "[Half&Half]": "SweetとBitterの中間、またはどちらにも収まりにくいおすすめ曲。",
   "[Bitter]": "ちょっとダークで大人の雰囲気の曲。",
   "[エールソング]": "旅立ち、変化、迷いの中で、少し前を向くための曲たち。",
   "[愛・祈り・癒し]": "愛、喪失、祈り、記憶の余韻を静かに描いた曲たち。",
@@ -108,6 +110,8 @@ const folderDescriptions = {
 
 const folderLongDescriptions = {
   "[Sweet]": "作者がピックアップしたお勧め曲。時々入れかえます。優しく、切なく、あるいは前向きな曲を集めています。",
+  "[Half&Half]":
+    "作者がピックアップしたお勧め曲。時々入れかえます。SweetとBitterの中間的なヴァイブスの楽曲、またはどちらにも入らないけれどおすすめしたい曲を集めています。",
   "[Bitter]": "作者がピックアップしたお勧め曲。時々入れかえます。ちょっとダークで大人の雰囲気の曲を集めています。",
   "[エールソング]":
     "爽やかなフォークポップから、学生の孤独や時代の変化を描いたインディーポップまで。大げさに励ますのではなく、日常の中でそっと背中を押してくれる曲を集めました。",
@@ -173,6 +177,7 @@ const folderInfo = {};
 
 [
   ["[Sweet]", "Sweet"],
+  ["[Half&Half]", "Half&Half"],
   ["[Bitter]", "Bitter"],
 ].forEach(([folderName, key]) => {
   if (tracks.some((track) => String(track[key] || "").trim() !== "")) {

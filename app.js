@@ -11,13 +11,16 @@ const tabButtons = document.querySelectorAll(".tab-button");
 const player = document.querySelector("#audio-player");
 const currentTitle = document.querySelector("#current-title");
 const currentMeta = document.querySelector("#current-meta");
+const autoNext = document.querySelector("#auto-next");
 
-let currentMode = "project";
+let currentMode = "recommend";
 let backHandler = () => renderFolders(currentMode);
 let producerProjectItems = [];
+let playbackQueue = [];
+let currentTrackIndex = -1;
 
 const folderOrder = {
-  recommend: ["[Sweet]", "[Bitter]"],
+  recommend: ["[Sweet]", "[Half&Half]", "[Bitter]"],
   project: [
     "[エールソング]",
     "[愛・祈り・癒し]",
@@ -32,8 +35,8 @@ const produceProjectName = "[プロデュース作品]";
 
 const producerFolders = [
   {
-    title: "多摩蘭坂7",
-    aliases: ["多摩蘭坂7"],
+    title: "TRS7",
+    aliases: ["TRS7", "多摩蘭坂7"],
     description: "架空の女性グループ。緊張感のあるポップ／ロック作品をまとめています。",
     image: "./images/produce/TRS7.png",
   },
@@ -76,11 +79,18 @@ function makeThumb(imageSrc, alt) {
   return thumb;
 }
 
+function setActiveTab(mode) {
+  tabButtons.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.mode === mode);
+  });
+}
+
 function groupTracks(mode) {
   if (mode === "recommend") {
     const groups = new Map();
     [
       ["[Sweet]", "Sweet"],
+      ["[Half&Half]", "Half&Half"],
       ["[Bitter]", "Bitter"],
     ].forEach(([folderName, key]) => {
       const items = tracks.filter((track) => String(track[key] || "").trim() !== "");
@@ -120,6 +130,7 @@ function sortFolderEntries(entries, mode) {
 
 function renderFolders(mode = currentMode) {
   currentMode = mode;
+  setActiveTab(currentMode);
   backHandler = () => renderFolders(currentMode);
   const modeInfo = folderModes[currentMode];
   const grouped = groupTracks(currentMode);
@@ -228,6 +239,8 @@ function renderTracks(folderName, items, kickerLabel = folderModes[currentMode].
   if (kickerLabel !== "Artist") {
     backHandler = () => renderFolders(currentMode);
   }
+  playbackQueue = items;
+  currentTrackIndex = items.findIndex((track) => track.audio === player.getAttribute("src"));
   viewKicker.textContent = kickerLabel;
   viewTitle.textContent = folderName;
   viewDescription.textContent =
@@ -237,11 +250,10 @@ function renderTracks(folderName, items, kickerLabel = folderModes[currentMode].
   trackList.hidden = false;
   trackList.innerHTML = "";
 
-  items.forEach((track) => {
-    const card = document.createElement("button");
-    card.type = "button";
+  items.forEach((track, index) => {
+    const card = document.createElement("article");
     card.className = "track-card";
-    card.setAttribute("aria-label", `${track.title} を再生`);
+    card.dataset.trackIndex = String(index);
 
     const body = document.createElement("div");
     body.className = "card-body";
@@ -256,25 +268,60 @@ function renderTracks(folderName, items, kickerLabel = folderModes[currentMode].
 
     const meta = document.createElement("div");
     meta.className = "meta-list";
-    [track.genre, track.style, `ボーカル: ${track.vocal}`, track.mood].forEach((item) => {
-      meta.append(makeChip(item));
+    [track.genre, track.vocal, track.mood]
+      .filter(Boolean)
+      .forEach((item) => {
+        meta.append(makeChip(item));
+      });
+
+    const actions = document.createElement("div");
+    actions.className = "track-actions";
+
+    const playButton = document.createElement("button");
+    playButton.type = "button";
+    playButton.className = "play-label";
+    playButton.textContent = "Play";
+    playButton.setAttribute("aria-label", `${track.title} を再生`);
+
+    const detailButton = document.createElement("button");
+    detailButton.type = "button";
+    detailButton.className = "detail-button";
+    detailButton.textContent = "詳細";
+    detailButton.setAttribute("aria-expanded", "false");
+    detailButton.addEventListener("click", () => {
+      const expanded = card.classList.toggle("is-expanded");
+      detailButton.textContent = expanded ? "閉じる" : "詳細";
+      detailButton.setAttribute("aria-expanded", String(expanded));
     });
 
-    body.append(title, description, meta);
+    playButton.addEventListener("click", () => playTrack(track, card, index));
+    actions.append(playButton, detailButton);
+
+    body.append(title, description, meta, actions);
     card.append(makeThumb(track.image, `${track.title} のサムネイル`), body);
-    card.addEventListener("click", () => playTrack(track, card));
     trackList.append(card);
   });
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function playTrack(track, card) {
+function playTrack(track, card, index = playbackQueue.findIndex((item) => item.audio === track.audio)) {
   document
     .querySelectorAll(".track-card")
-    .forEach((item) => item.classList.remove("is-active"));
+    .forEach((item) => {
+      item.classList.remove("is-active");
+      const button = item.querySelector(".play-label");
+      if (button) {
+        button.textContent = "Play";
+      }
+    });
 
   card.classList.add("is-active");
+  const activeButton = card.querySelector(".play-label");
+  if (activeButton) {
+    activeButton.textContent = "Playing";
+  }
+  currentTrackIndex = index;
   player.src = track.audio;
   player.play().catch(() => {
     currentMeta.textContent = "再生ボタンを押すと音源が再生されます。";
@@ -284,14 +331,31 @@ function playTrack(track, card) {
   currentMeta.textContent = `${track.project} / ${track.genre} / ボーカル: ${track.vocal}`;
 }
 
+function playNextTrack() {
+  if (!autoNext.checked || playbackQueue.length === 0) {
+    return;
+  }
+
+  const nextIndex = currentTrackIndex + 1;
+  if (nextIndex >= playbackQueue.length) {
+    currentMeta.textContent = "このフォルダーの最後の曲まで再生しました。";
+    return;
+  }
+
+  const nextTrack = playbackQueue[nextIndex];
+  const nextCard = trackList.querySelector(`[data-track-index="${nextIndex}"]`);
+  if (nextCard) {
+    playTrack(nextTrack, nextCard, nextIndex);
+  }
+}
+
 tabButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    tabButtons.forEach((item) => item.classList.remove("is-active"));
-    button.classList.add("is-active");
     renderFolders(button.dataset.mode);
   });
 });
 
 backButton.addEventListener("click", () => backHandler());
+player.addEventListener("ended", playNextTrack);
 
 renderFolders();

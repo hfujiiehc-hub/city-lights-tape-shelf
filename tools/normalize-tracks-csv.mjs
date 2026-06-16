@@ -67,6 +67,7 @@ const headers = [
   "publish",
   "Sweet",
   "Bitter",
+  "Half&Half",
   "title",
   "description",
   "project",
